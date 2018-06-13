@@ -3,7 +3,11 @@ from __future__ import absolute_import
 import functools
 import logging
 from pprint import pformat
-from urllib import urlencode
+#urlencode location changed on Python3
+try:
+   from urllib.parse import urlencode
+except ImportError:
+   from urllib import urlencode
 
 import flask
 from flask import request, current_app
@@ -117,7 +121,7 @@ class ACLManager(object):
         """Decorator to attach an ACL to a route.
 
         E.g::
-        
+
             @app.route('/url/to/view')
             @authz.route_acl('''
                 ALLOW WHEEL ALL
@@ -215,4 +219,3 @@ class ACLManager(object):
             return False
 
         return self.can('http.' + (method or 'GET').lower(), view, **kwargs)
-

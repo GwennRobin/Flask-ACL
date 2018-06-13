@@ -8,12 +8,12 @@ from flask_acl.state import parse_state
 def parse_acl(acl_iter):
     """Parse a string, or list of ACE definitions, into usable ACEs."""
 
-    if isinstance(acl_iter, basestring):
+    if isinstance(acl_iter, str):
         acl_iter = [acl_iter]
 
     for chunk in acl_iter:
 
-        if isinstance(chunk, basestring):
+        if isinstance(chunk, str):
             chunk = chunk.splitlines()
             chunk = [re.sub(r'#.+', '', line).strip() for line in chunk]
             chunk = filter(None, chunk)
@@ -24,7 +24,7 @@ def parse_acl(acl_iter):
 
             # If this was provided as a string, then parse the permission set.
             # Otherwise, use it as-is, which will result in an equality test.
-            if isinstance(ace, basestring):
+            if isinstance(ace, str):
                 ace = ace.split(None, 2)
                 state, predicate, permission_set = ace
                 yield parse_state(state), parse_predicate(predicate), parse_permission_set(permission_set)
@@ -88,4 +88,3 @@ def check(permission, raw_acl, **context):
         # ))
         if pred_match and perm_match:
             return state
-
